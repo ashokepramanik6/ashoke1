@@ -46,6 +46,20 @@ view: users {
     map_layer_name: countries
     sql: ${TABLE}.country ;;
   }
+  dimension: full_name {
+    type: string
+    sql: CONCAT(CONCAT(${first_name}, ' '), ${last_name}) ;;
+  }
+  dimension: leangth {
+    type: number
+    sql: len(${full_name}) ;;
+  }
+  dimension: age_tier {
+    type: tier
+    tiers: [0, 10, 20, 30, 40, 50, 60, 70, 80]
+    style: integer
+    sql: ${age} ;;
+  }
 
   # Dates and timestamps can be represented in Looker using a dimension group of type: time.
   # Looker converts dates and timestamps to the specified timeframes within the dimension group.
