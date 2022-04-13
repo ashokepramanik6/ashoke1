@@ -112,6 +112,10 @@ view: users {
     type: zipcode
     sql: ${TABLE}.zip ;;
   }
+  dimension: date_formatted {
+    sql: ${created_date} ;;
+    html: {{ rendered_value | date: "%a, %B %d, %Y" }} ;;
+  }
 
   measure: count {
     type: count
