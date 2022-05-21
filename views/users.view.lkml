@@ -147,6 +147,7 @@ view: users {
   }
 
   dimension: state {
+    required_access_grants: [simple1]
     # group_label: "Location"
     case_sensitive: no
     type: string

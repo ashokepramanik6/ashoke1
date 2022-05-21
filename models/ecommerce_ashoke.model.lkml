@@ -119,7 +119,7 @@ explore: product_facts {
   }
 }
 explore: users{               #---------Access_filter-------------
-  required_access_grants: [simple1]
+
   access_filter: {
     field: users.state
     user_attribute: ashoke_demo
