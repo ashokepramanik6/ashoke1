@@ -118,16 +118,15 @@ explore: product_facts {
     relationship: many_to_one
   }
 }
-explore: users{
+explore: users{               #---------Access_filter-------------
   required_access_grants: [simple1]
-                                        #---------Access_filter-------------
   access_filter: {
     field: users.state
     user_attribute: ashoke_demo
   }
 }
 access_grant: simple1 {
-  user_attribute: aa
+  user_attribute: ashoke_demo2
   allowed_values: [ "ashoke", "soni" ]
 }
 
