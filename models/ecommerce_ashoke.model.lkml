@@ -27,7 +27,6 @@ persist_with: ecommerce_ashoke_default_datagroup
 # }
 
 explore: inventory_items {
-  required_access_grants: [simple1]
   join: products {
     type: left_outer
     sql_on: ${inventory_items.id} = ${products.id} ;;#product_id
@@ -119,7 +118,9 @@ explore: product_facts {
     relationship: many_to_one
   }
 }
-explore: users{                         #---------Access_filter-------------
+explore: users{
+  required_access_grants: [simple1]
+                                        #---------Access_filter-------------
   access_filter: {
     field: users.state
     user_attribute: ashoke_demo
