@@ -1,6 +1,5 @@
 # include: "/views/core_fields.view"
 view: users {
-  required_access_grants: [simple1]
  #required_access_grants: [can_see_pii]  ##--Nobody can access user view
   # The sql_table_name parameter indicates the underlying database table
   # to be used for all fields in this view.

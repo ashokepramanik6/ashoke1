@@ -112,19 +112,20 @@ explore: orders {
   }
 }
 explore: product_facts {
+  required_access_grants: [simple1]
   join: products {
     type: left_outer
     sql_on: ${product_facts.product_id} = ${products.id} ;;
     relationship: many_to_one
   }
 }
-explore: users{               #---------Access_filter-------------
+# explore: users{               #---------Access_filter-------------
 
-  access_filter: {
-    field: users.state
-    user_attribute: ashoke_demo
-  }
-}
+#   access_filter: {
+#     field: users.state
+#     user_attribute: ashoke_demo
+#   }
+# }
 access_grant: simple1 {
   user_attribute: ashoke_demo2
   allowed_values: [ "ashoke", "soni" ]
