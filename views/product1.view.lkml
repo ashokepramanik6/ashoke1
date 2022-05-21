@@ -12,6 +12,11 @@ view: product1 {
   dimension: id {
     type: number
   }
-  dimension: brand {}
+  dimension: brand {
+    link: {
+      label: "Google search for {{ value }}"
+      url: "https://www.google.com/search?q={{ value }}"
+    }
+  }
   dimension: category {}
 }

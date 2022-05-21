@@ -1,5 +1,6 @@
-# The name of this view in Looker is "Users"
+# include: "/views/core_fields.view"
 view: users {
+ #required_access_grants: [can_see_pii]  ##--Nobody can access user view
   # The sql_table_name parameter indicates the underlying database table
   # to be used for all fields in this view.
   sql_table_name: public.users ;;
@@ -20,7 +21,16 @@ view: users {
   dimension: age {
     type: number
     sql: ${TABLE}.age ;;
+    # required_access_grants: [can_see_pii] ##--age is no longer exists in explore, but avg_age is still there
   }
+  # measure: xyz {
+  #   type: number
+  #   sql: ${age}*${count} ;;
+  # }
+  # measure: final {
+  #   type: number
+  #   sql: ${xyz}/(${count_female_user}) ;;
+ # }
 
   # A measure is a field that uses a SQL aggregate function. Here are defined sum and average
   # measures for this dimension, but you can also add measures of many different aggregates.
@@ -36,6 +46,11 @@ view: users {
     sql: ${age} ;;
   }
 
+  # measure: avg {
+  #   type: number
+  #   sql: ${total_age}/${count} ;;
+  # }
+
   dimension: city {
     type: string
     sql: ${TABLE}.city ;;
@@ -49,6 +64,11 @@ view: users {
   dimension: full_name {
     type: string
     sql: CONCAT(CONCAT(${first_name}, ' '), ${last_name}) ;;
+    html: <font color="green">{{ value }}</font> ;;
+  }
+  dimension: fullname_redshift {
+    type: string
+    sql: ${first_name}||','||${last_name} ;;
   }
   dimension: leangth {
     type: number
@@ -65,6 +85,7 @@ view: users {
   # Looker converts dates and timestamps to the specified timeframes within the dimension group.
 
   dimension_group: created {
+    description: "When the order was created"
     type: time
     timeframes: [
       raw,
@@ -77,10 +98,37 @@ view: users {
     ]
     sql: ${TABLE}.created_at ;;
   }
+  ##-----OR-----
+
+  # extends: [core_fields]
+
+  dimension_group: days_since_created {
+    type: duration
+    intervals: [second,minute,hour,day,week,month,quarter,year]
+    sql_start: ${created_date} ;;
+    sql_end: current_date ;;
+  }
+  dimension: days_diff {
+    type: number
+    sql: datediff(day,${created_raw},current_date) ;;
+  }
 
   dimension: email {
     type: string
     sql: ${TABLE}.email ;;
+
+    # link: {
+    #   label: "user dashboard for {{ value }}"
+    #   url: "/dashboards/1121?email={{ value }}"
+    # }
+
+    link:{
+      label: "explore user info2"
+      url:"/explore/ab_project/order_items?fields=orders.id,orders.status,orders.total_orders&sorts=orders.total_orders+desc&limit=50"
+    }
+    html:<button><a href= "user dashboard for {{ value }}">user dashboard for {{ value }}</a></button>;;
+
+    # required_access_grants: [can_see_pii]
   }
 
   dimension: first_name {
@@ -99,16 +147,40 @@ view: users {
   }
 
   dimension: state {
+    # group_label: "Location"
+    case_sensitive: no
     type: string
     sql: ${TABLE}.state ;;
+    # html: <a href="https://www.google.com/search?q={{value}}">{{value}} -ashoke</a> ;; #O/P syntax
+  link: {
+    label: "Srch in Google"
+    url: "https://www.google.com/search?q={{value}}"
   }
-
+    link: {
+      label: "Search this page in Google"
+      url: "https://www.google.com/search?q={{value}}"
+    }
+  }
+  dimension: state_Test {
+    # group_label: "Location"
+    case_sensitive: no
+    type: string
+    sql: ${TABLE}.state ;;
+    html: {% if value == "California" %}
+    <p style="color: black; background-color: lightblue; font-size: 100%; text-align: center"> {{rendered_value}} </p>
+    {% elsif value == "Alabama" %}
+    <p style="color: black; background-color: #B9C1BD; font-size: 100%; text-align: left"> {{rendered_value}} </p>
+    {% else %}
+    <p style="color: black; background-color: #FFD6D6; font-size: 100%; text-align: right"> {{rendered_value}} </p>
+    {% endif %};;
+}
   dimension: traffic_source {
     type: string
     sql: ${TABLE}.traffic_source ;;
   }
 
   dimension: zip {
+    # group_label: "Location"
     type: zipcode
     sql: ${TABLE}.zip ;;
   }
@@ -120,5 +192,20 @@ view: users {
   measure: count {
     type: count
     drill_fields: [id, first_name, last_name, orders.count]
+
   }
+  # measure: sumOf {
+  #   type: sum
+  #   sql: ${count} ;;
+  # }
+  measure: count_female_user {
+    type: count
+    filters: [gender: "f"]
+  }
+measure: percentage_female_user {
+  type: number
+  value_format_name: percent_1
+  sql: (1.0*${count_female_user}/NULLIF(${count},0)) ;;
+}
+
 }

@@ -5,32 +5,50 @@ connection: "thelook"
 include: "/views/**/*.view"
 include: "/**/*.dashboard.lookml"
 
-# Datagroups define a caching policy for an Explore. To learn more,
 # use the Quick Help panel on the right to see documentation.
 
 datagroup: ecommerce_ashoke_default_datagroup {
   # sql_trigger: SELECT MAX(id) FROM etl_log;;
+  sql_trigger: select current_date ;;
   max_cache_age: "1 hour"
-}
+  }
+
+ datagroup: users_datagroup {
+   sql_trigger: select max(created_at) from public.orders ;;
+  max_cache_age: "2 hours"
+ }
+
 
 persist_with: ecommerce_ashoke_default_datagroup
 
-# Explores allow you to join together different views (database tables) based on the
-# relationships between fields. By joining a view into an Explore, you make those
-# fields available to users for data analysis.
-# Explores should be purpose-built for specific use cases.
-
-# To see the Explore you’re building, navigate to the Explore menu and select an Explore under "Ecommerce Ashoke"
+# access_grant: can_see_pii {
+#   user_attribute: department
+#   allowed_values: ["HR","Finance"]
+# }
 
 explore: inventory_items {
   join: products {
     type: left_outer
-    sql_on: ${inventory_items.product_id} = ${products.id} ;;
+    sql_on: ${inventory_items.id} = ${products.id} ;;#product_id
     relationship: many_to_one
   }
 }
 
 explore: order_items {
+  # sql_always_having: ${total_sale_price}>900 ;;
+  # sql_always_having: ${returned_raw} is null ;;
+  # always_filter: {
+  #   filters: [orders.status: "-complete"]
+  # }
+  # always_filter: {
+  #   filters: [inventory_items.created_date: "before today"]
+  # }
+  # conditionally_filter: {
+  #   filters: [inventory_items.created_date: "2 years"]
+  #   unless: [inventory_items.id]
+  # }
+  # sql_always_where: ${orders.status}<>'pending' ;;
+  # label: "Items_Orders"
   join: orders {
     type: left_outer
     sql_on: ${order_items.order_id} = ${orders.id} ;;
@@ -44,17 +62,21 @@ explore: order_items {
   }
 
   join: users {
+
+    # view_label: "Customer instead of users"
     type: left_outer
     sql_on: ${orders.user_id} = ${users.id} ;;
-    relationship: many_to_one
+    relationship: many_to_one #order_items>many, users>1
   }
 
   join: products {
+    # view_label: "Product+Product1"
     type: left_outer
     sql_on: ${inventory_items.product_id} = ${products.id} ;;
     relationship: many_to_one
   }
   join: product1 {
+    # view_label: "Product+Product1"
     type: left_outer
     sql_on: ${inventory_items.product_id} = ${products.id} ;;
     relationship: many_to_one
@@ -62,13 +84,33 @@ explore: order_items {
 }
 
 explore: orders {
+
+   fields: [ALL_FIELDS*]
+
+  persist_with: users_datagroup
+
+  access_filter: {
+    user_attribute: country
+    field: users.country
+  }
+
   join: users {
+
     type: left_outer
     sql_on: ${orders.user_id} = ${users.id} ;;
     relationship: many_to_one
   }
+  join: fact_sql_dt {
+     type: left_outer
+    sql_on: ${orders.user_id} = ${fact_sql_dt.order_items_id} ;;
+    relationship: many_to_one
+  }
+  join: fact_ndt {
+    type: left_outer
+    sql_on: ${orders.user_id} = ${fact_ndt.customer_id} ;;
+    relationship: one_to_one
+  }
 }
-
 explore: product_facts {
   join: products {
     type: left_outer
@@ -76,11 +118,14 @@ explore: product_facts {
     relationship: many_to_one
   }
 }
+explore: users{
+  access_filter: {
+    field: users.state
+    user_attribute: ashoke_demo
+  }
+}
+
 
 # To create more sophisticated Explores that involve multiple views, you can use the join parameter.
 # Typically, join parameters require that you define the join type, join relationship, and a sql_on clause.
 # Each joined view also needs to define a primary key.
-
-explore: products {}
-
-explore: users {}
