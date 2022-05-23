@@ -41,7 +41,7 @@ explore: order_items {
   #   filters: [orders.status: "-complete"]
   # }
   # always_filter: {
-  #   filters: [inventory_items.created_date: "before today"]
+  #   filters: [inventory_items.created_date: "before today", inventory_items.created_date: "today"]
   # }
   # conditionally_filter: {
   #   filters: [inventory_items.created_date: "2 years"]
@@ -112,14 +112,14 @@ explore: orders {
   }
 }
 explore: product_facts {
-  required_access_grants: [simple1]
+  required_access_grants: [simple1]   #---using access grant
   join: products {
     type: left_outer
     sql_on: ${product_facts.product_id} = ${products.id} ;;
     relationship: many_to_one
   }
 }
-# explore: users{               #---------Access_filter-------------
+# explore: users{   #------we can use either---Access_filter OR Access_grant-------------
 
 #   access_filter: {
 #     field: users.state

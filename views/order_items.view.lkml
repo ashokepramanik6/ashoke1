@@ -14,7 +14,7 @@ view: order_items {
   }
 parameter: date_granularity {
   type: string
-  allowed_value: {label:"Daily" value:"day"}
+  allowed_value: {label:"" value:"{{ _user_attributes['ashoke_demo'] }}"}
   allowed_value: {label:"Weekly" value:"week"}
   allowed_value: {label:"Monthly" value:"month"}
 }
@@ -25,9 +25,9 @@ dimension: dynamic_timeframe {
   # else ${returned_month} end;;
   #------OR,------
   ##---if date_granularity is string then "'day'"and if unquoted then "day"---**
-  sql: {% if date_granularity._parameter_value == "'day'" %} ${returned_date}
-  {% elsif date_granularity._parameter_value == "'week'" %} ${returned_week}
-  {% else %} ${returned_month} {% endif %};;
+  # sql: {% if date_granularity._parameter_value == "'day'" %} ${returned_date}
+  # {% elsif date_granularity._parameter_value == "'week'" %} ${returned_week}
+  # {% else %} ${returned_month} {% endif %};;
 
   # html: {% if date_granularity._parameter_value == "'day'" %} ${returned_date}
   # <font color="green">{{returned_date}}</font>
