@@ -14,7 +14,7 @@ view: order_items {
   }
 parameter: date_granularity {
   type: string
-  allowed_value: {label:"" value:"{{ _user_attributes['ashoke_demo'] }}"}
+  allowed_value: {label:"ashoke_demo" value:"{{ _user_attributes['ashoke_demo'] }}"}
   allowed_value: {label:"Weekly" value:"week"}
   allowed_value: {label:"Monthly" value:"month"}
 }
