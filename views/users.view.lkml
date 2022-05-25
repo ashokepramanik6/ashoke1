@@ -9,7 +9,7 @@ view: users {
   # You need to define a primary key in a view in order to join to other views.
 
   dimension: id {
-    primary_key: yes
+   # primary_key: yes
     type: number
     sql: ${TABLE}.id ;;
   }
@@ -63,8 +63,10 @@ view: users {
   }
   dimension: full_name {
     type: string
+    primary_key: yes
     sql: CONCAT(CONCAT(${first_name}, ' '), ${last_name}) ;;
     html: <font color="green">{{ value }}</font> ;;
+
   }
   dimension: fullname_redshift {
     type: string
