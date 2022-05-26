@@ -65,7 +65,7 @@ explore: order_items {
 
     # view_label: "Customer instead of users"
     type: left_outer
-    sql_on: ${orders.user_id} = ${users.full_name} ;;
+    sql_on: ${orders.user_id} = ${users.id} ;;
     relationship: many_to_many #many_to_one #order_items>many, users>1
   }
 
@@ -97,7 +97,7 @@ explore: orders {
   join: users {
 
     type: left_outer
-    sql_on: ${orders.user_id} = ${users.full_name} ;;
+    sql_on: ${orders.user_id} = ${users.id} ;;
     relationship: many_to_many #many_to_one
   }
   join: fact_sql_dt {
