@@ -112,24 +112,24 @@ explore: orders {
   }
 }
 explore: product_facts {
-  required_access_grants: [simple1]   #---using access grant
+  # required_access_grants: [simple1]   #---using access grant
   join: products {
     type: left_outer
     sql_on: ${product_facts.product_id} = ${products.id} ;;
     relationship: many_to_one
   }
 }
-# explore: users{   #------we can use either---Access_filter OR Access_grant-------------
+explore: users{   #------we can use either---Access_filter OR Access_grant-------------
 
-#   access_filter: {
-#     field: users.state
-#     user_attribute: ashoke_demo
-#   }
-# }
-access_grant: simple1 {
-  user_attribute: ashoke_demo2
-  allowed_values: [ "ashoke", "soni" ]
+  access_filter: {
+    field: users.state
+    user_attribute: ashoke_demo
+  }
 }
+# access_grant: simple1 {
+#   user_attribute: ashoke_demo2
+#   allowed_values: [ "ashoke", "soni" ]
+# }
 
 #####
 # To create more sophisticated Explores that involve multiple views, you can use the join parameter.
