@@ -9,7 +9,7 @@ include: "/views/**/*.view"
 
 datagroup: ecommerce_ashoke_default_datagroup {
    sql_trigger:SELECT FLOOR(UNIX_TIMESTAMP() / (1*60*60)) ;;
-  max_cache_age: "1 hour"
+  #max_cache_age: "1 hour"
 }
 
 persist_with: ecommerce_ashoke_default_datagroup
