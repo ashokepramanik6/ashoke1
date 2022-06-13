@@ -8,7 +8,7 @@ include: "/views/**/*.view"
 # use the Quick Help panel on the right to see documentation.
 
 datagroup: ecommerce_ashoke_default_datagroup {
-  # sql_trigger: SELECT MAX(id) FROM etl_log;;
+   sql_trigger:SELECT FLOOR(UNIX_TIMESTAMP() / (1*60*60)) ;;
   max_cache_age: "1 hour"
 }
 
