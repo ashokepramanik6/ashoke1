@@ -12,7 +12,18 @@ view: orders {
     type: number
     sql: ${TABLE}.id ;;
   }
-
+  parameter: show_out_as_negative {
+    label: "Show OUT as Negative Value?"
+    type: number
+    allowed_value: {
+      label: "Yes"
+      value: "-1"
+    }
+    allowed_value: {
+      label: "No"
+      value: "1"
+    }
+  }
   # Dates and timestamps can be represented in Looker using a dimension group of type: time.
   # Looker converts dates and timestamps to the specified timeframes within the dimension group.
 
@@ -54,4 +65,11 @@ view: orders {
     type: count
     drill_fields: [id, users.id, users.first_name, users.last_name, order_items.count]
   }
+
+  measure: countdif {
+    type: number
+    sql: : {% parameter show_out_as_negative %} * ${count} ;;
+  }
+
+
 }
