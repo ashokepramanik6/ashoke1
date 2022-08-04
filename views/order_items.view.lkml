@@ -29,11 +29,11 @@ dimension: dynamic_timeframe {
   {% elsif date_granularity._parameter_value == "'week'" %} ${returned_week}
   {% else %} ${returned_month} {% endif %};;
 
-  # html: {% if date_granularity._parameter_value == "'day'" %} ${returned_date}
-  # <font color="green">{{returned_date}}</font>
-  # {% elsif date_granularity._parameter_value == "'week'" %} ${returned_week}
-  # <font color="red">{{returned_week}}</font>
-  # {% else %} <font color="black">{{returned_month}}</font> {% endif %};;
+   html: {% if date_granularity._parameter_value == "'day'" %} ${returned_date}
+   <font color="green">{{returned_date}}</font>
+   {% elsif date_granularity._parameter_value == "'week'" %} ${returned_week}
+   <font color="red">{{returned_week}}</font>
+   {% else %} <font color="black">{{returned_month}}</font> {% endif %};;
 }
 
   # Here's what a typical dimension looks like in LookML.
@@ -95,6 +95,10 @@ dimension: dynamic_timeframe {
     sql: ${sale_price} ;;
     value_format_name: usd
   }
+  measure: cumulative_total_revenue {
+    type: running_total
+    sql: ${total_revenue} ;;
+  }
 
   # A measure is a field that uses a SQL aggregate function. Here are defined sum and average
   # measures for this dimension, but you can also add measures of many different aggregates.
@@ -104,11 +108,16 @@ dimension: dynamic_timeframe {
     type: sum
     sql: ${sale_price} ;;
  }
+measure: running {
+  type: running_total
+  sql: ${total_sale_price} ;;
+}
   measure: type_num_two_measure {
     description: "It must be num and if val_format is decimal_1 them div by 100"
     type: number
     sql: ${total_sale_price}/NULLIF(${users.count},0) ;;
     value_format_name:percent_1
+    link: {label: "Top 5000 Results" url: "{{ total_sale_price._link}}&limit=5000" }
   }
 
   measure: average_sale_price {

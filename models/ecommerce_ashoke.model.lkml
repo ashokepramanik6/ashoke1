@@ -4,6 +4,7 @@ connection: "thelook"
 # include all the views
 include: "/views/**/*.view"
 include: "/**/*.dashboard.lookml"
+include: "/pramanik.dashboard.lookml"
 
 # use the Quick Help panel on the right to see documentation.
 
@@ -41,7 +42,7 @@ explore: order_items {
   #   filters: [orders.status: "-complete"]
   # }
   # always_filter: {
-  #   filters: [inventory_items.created_date: "before today", inventory_items.created_date: "today"]
+  #   filters: [inventory_items.created_date: "before today"]
   # }
   # conditionally_filter: {
   #   filters: [inventory_items.created_date: "2 years"]
@@ -130,7 +131,16 @@ explore: users{   #------we can use either---Access_filter OR Access_grant------
 #   user_attribute: ashoke_demo2
 #   allowed_values: [ "ashoke", "soni" ]
 # }
-
+explore: +order_items {
+  query: order_count_by_month {
+    label: "This is Quick start"
+    description: "Number of orders placed by month in 2019"
+    dimensions: [orders.created_month]
+    measures: [orders.count]
+    filters: [orders.created_date: "2017"]
+    limit: 100
+  }
+}
 #####
 # To create more sophisticated Explores that involve multiple views, you can use the join parameter.
 # Typically, join parameters require that you define the join type, join relationship, and a sql_on clause.

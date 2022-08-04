@@ -45,6 +45,14 @@ view: users {
     type: average
     sql: ${age} ;;
   }
+  dimension: session_duration {
+    label: "Session Duration"
+    type: bin
+    bins: [0, 6, 11, 16, 21, 26, 31]
+    style: integer
+    value_format: "0 \"mins\""
+    sql: ${age} ;;
+  }
 
   # measure: avg {
   #   type: number
@@ -78,7 +86,7 @@ view: users {
   dimension: age_tier {
     type: tier
     tiers: [0, 10, 20, 30, 40, 50, 60, 70, 80]
-    style: integer
+    style: classic
     sql: ${age} ;;
   }
 
@@ -95,10 +103,12 @@ view: users {
       week,
       month,
       quarter,
-      year
+      year,
+      quarter_of_year
     ]
     sql: ${TABLE}.created_at ;;
   }
+
   ##-----OR-----
 
   # extends: [core_fields]
@@ -168,11 +178,13 @@ view: users {
     type: string
     sql: ${TABLE}.state ;;
     html: {% if value == "California" %}
-    <p style="color: black; background-color: lightblue; font-size: 100%; text-align: center"> {{rendered_value}} </p>
+    <p style="color: black; background-color: lightblue; font-size: 100%; text-align: center;"> {{rendered_value}} </p>
     {% elsif value == "Alabama" %}
-    <p style="color: black; background-color: #B9C1BD; font-size: 100%; text-align: left"> {{rendered_value}} </p>
+    <p style="color: black; background-color: #B9C1BD; font-size: 25px; text-align: left;"> <b>Successful Orders: </b>You were {{ rendered_value }} the average </p>
     {% else %}
-    <p style="color: black; background-color: #FFD6D6; font-size: 100%; text-align: right"> {{rendered_value}} </p>
+<div class="vis-single-value" style="line-height: 1; font-size: 200%; background-color: #f5f5f5; text-align: left; color: black;">
+<p style="text-align: left;"><b>Successful Orders: </b>You were {{rendered_value}} the average</p>
+</div>
     {% endif %};;
 }
   dimension: traffic_source {
@@ -205,8 +217,10 @@ view: users {
   }
 measure: percentage_female_user {
   type: number
-  value_format_name: percent_1
+ value_format_name: percent_1
+ # value_format_name: currency_format
   sql: (1.0*${count_female_user}/NULLIF(${count},0)) ;;
+  link: {label: "Explore Top 600 Results" url: "{{ count_female_user._link}}&limit=600" }
 }
 
 }

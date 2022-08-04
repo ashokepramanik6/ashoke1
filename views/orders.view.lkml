@@ -21,6 +21,7 @@ view: orders {
     timeframes: [
       raw,
       time,
+      time_of_day,
       date,
       week,
       month,
@@ -37,6 +38,19 @@ view: orders {
   dimension: status {
     type: string
     sql: ${TABLE}.status ;;
+  }
+  dimension: New_status {
+    type: string
+    sql: ${status} ;;
+    html: {% if value == "cancelled" %}
+    <p style="color: black; background-color: lightblue; font-size: 100%; text-align: center;"> {{rendered_value}} </p>
+    {% elsif value == "pending" %}
+    <p style="color: black; background-color: #B9C1BD; font-size: 25px; text-align: left;"> {{ rendered_value }} </p>
+    {% else %}
+    <div style="line-height: 1; font-size: 200%; background-color: red; text-align: left; color: black;">
+    <p style="text-align: left;">{{rendered_value}} </p>
+    </div>
+    {% endif %};;
   }
 
   dimension: traffic_source {

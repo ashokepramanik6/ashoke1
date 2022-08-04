@@ -61,6 +61,7 @@ view: products {
   #   end;;
   # }
 
+
   dimension: department {
     type: string
     sql: ${TABLE}.department ;;
