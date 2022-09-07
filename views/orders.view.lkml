@@ -26,11 +26,17 @@ view: orders {
       week,
       month,
       quarter,
-      year
+      year,
+      day_of_week,
+      day_of_week_index,
+      day_of_year
     ]
     sql: ${TABLE}.created_at ;;
   }
-
+  measure: xyx {
+    type: number
+    sql: CAST(${created_time} As Integer) ;;
+  }
   # Here's what a typical dimension looks like in LookML.
   # A dimension is a groupable field that can be used to filter query results.
   # This dimension will be called "Status" in Explore.
@@ -38,6 +44,15 @@ view: orders {
   dimension: status {
     type: string
     sql: ${TABLE}.status ;;
+  }
+  dimension: is_big_order {
+    type: yesno
+    sql: ${status} = 'cancelled' ;;
+  }
+# This is correct
+  measure: total_boxes_needed {
+    type: number
+    sql: CASE WHEN ${is_big_order} THEN 2 ELSE 1 END ;;
   }
   dimension: New_status {
     type: string

@@ -137,7 +137,7 @@ explore: +order_items {
     description: "Number of orders placed by month in 2019"
     dimensions: [orders.created_month]
     measures: [orders.count]
-    filters: [orders.created_date: "2017"]
+   # filters: [orders.created_date: "2017"]
     limit: 100
   }
 }

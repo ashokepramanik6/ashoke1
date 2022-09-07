@@ -14,9 +14,10 @@ view: users {
     sql: ${TABLE}.id ;;
   }
 
+
   # Here's what a typical dimension looks like in LookML.
   # A dimension is a groupable field that can be used to filter query results.
-  # This dimension will be called "Age" in Explore.
+  # This dimension will be called "Age" in Explore.##
 
   dimension: age {
     type: number
@@ -108,6 +109,7 @@ view: users {
     ]
     sql: ${TABLE}.created_at ;;
   }
+
 
   ##-----OR-----
 
@@ -207,6 +209,14 @@ view: users {
     drill_fields: [id, first_name, last_name, orders.count]
 
   }
+  dimension: Ceiling {
+    type: number
+    sql: ceiling(round(1.0*${users.age}/15, 2)) ;;
+  }
+  measure: Ceil {
+    type: number
+    sql: ceiling(round(1.0*${users.age}/15, 2)) ;;
+  }
   # measure: sumOf {
   #   type: sum
   #   sql: ${count} ;;
@@ -215,12 +225,15 @@ view: users {
     type: count
     filters: [gender: "f"]
   }
+  # measure: Now_time {
+  #   type: date_time
+  # sql: ${Now_time} ;;
+  #   convert_tz: no
+  # }
 measure: percentage_female_user {
   type: number
  value_format_name: percent_1
  # value_format_name: currency_format
   sql: (1.0*${count_female_user}/NULLIF(${count},0)) ;;
   link: {label: "Explore Top 600 Results" url: "{{ count_female_user._link}}&limit=600" }
-}
-
-}
+}}

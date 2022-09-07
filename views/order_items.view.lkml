@@ -93,8 +93,14 @@ dimension: dynamic_timeframe {
   measure: total_revenue {
     type: sum
     sql: ${sale_price} ;;
-    value_format_name: usd
+    #value_format_name: usd
+    precision: 9
   }
+# measure: Revenu_Test{
+#   type: number
+#   sql: CAST(${total_revenue} AS DECIMAL(12,0)) ;;
+# }
+
   measure: cumulative_total_revenue {
     type: running_total
     sql: ${total_revenue} ;;
