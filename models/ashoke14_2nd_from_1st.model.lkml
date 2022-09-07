@@ -7,7 +7,7 @@ datagroup: ashoke14_2nd_from_1st_default_datagroup {
   # sql_trigger: SELECT MAX(id) FROM etl_log;;
   max_cache_age: "1 hour"
 }
-
+####
 persist_with: ashoke14_2nd_from_1st_default_datagroup
 
 # explore: div_stylebackgroundimage_urldatatexthtmlimgsrc1 {}
