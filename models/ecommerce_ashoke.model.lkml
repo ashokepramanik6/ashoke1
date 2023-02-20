@@ -90,10 +90,10 @@ explore: orders {
 
   persist_with: users_datagroup
 
-  access_filter: {
-    user_attribute: country
-    field: users.country
-  }
+  # access_filter: {
+  #   user_attribute: country
+  #   field: users.country
+  # }
 
   join: users {
 
@@ -125,6 +125,11 @@ explore: users{   #------we can use either---Access_filter OR Access_grant------
   access_filter: {
     field: users.state
     user_attribute: ashoke_demo
+  }
+  join: orders {
+    type: left_outer
+    sql_on: ${users.id}=${orders.id} ;;
+    relationship: many_to_one
   }
 }
 # access_grant: simple1 {

@@ -37,6 +37,7 @@ view: orders {
     type: number
     sql: CAST(${created_time} As Integer) ;;
   }
+
   # Here's what a typical dimension looks like in LookML.
   # A dimension is a groupable field that can be used to filter query results.
   # This dimension will be called "Status" in Explore.
@@ -49,7 +50,7 @@ view: orders {
     type: yesno
     sql: ${status} = 'cancelled' ;;
   }
-# This is correct
+# This is correct##
   measure: total_boxes_needed {
     type: number
     sql: CASE WHEN ${is_big_order} THEN 2 ELSE 1 END ;;
@@ -84,4 +85,10 @@ view: orders {
     drill_fields: [id, users.id, users.first_name, users.last_name, order_items.count]
 
   }
+
+  # dimension: name2 {
+  #   type: string
+  #   sql: ${New_status} ;;
+  #   html:<a href="https://gcpl230.cloud.looker.com/dashboards/67?ID=0&Name={{ _filters['orders.created_date'] | url_encode }}">{{value}}</a>;;
+  # }
 }

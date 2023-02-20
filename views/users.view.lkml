@@ -22,6 +22,9 @@ view: users {
   dimension: age {
     type: number
     sql: ${TABLE}.age ;;
+    html:<a href="https://gcpl230.cloud.looker.com/dashboards/67?ID=0&Name=
+    {{ _filters['orders.created_date'] | url_encode }}"a>{{value}}</a>;;
+
     # required_access_grants: [can_see_pii] ##--age is no longer exists in explore, but avg_age is still there
   }
   # measure: xyz {
@@ -82,7 +85,7 @@ view: users {
   }
   dimension: leangth {
     type: number
-    sql: len(${full_name}) ;;
+    sql: len(${full_name})-1 ;;
   }
   dimension: age_tier {
     type: tier
@@ -189,6 +192,23 @@ view: users {
 </div>
     {% endif %};;
 }
+
+  dimension: state_flag_image {
+    type: string
+    sql: ${state} ;;
+    html:
+              {% if state._value == "California" %}
+              <img src="https://upload.wikimedia.org/wikipedia/commons/0/01/Flag_of_California.svg" height="170" width="255">
+              {% elsif state._value == "New York" %}
+              <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/1/1a/Flag_of_New_York.svg/1200px-Flag_of_New_York.svg.png" height="170" width="255">
+              {% elsif state._value == "Colorado" %}
+              <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/4/46/Flag_of_Colorado.svg/255px-Flag_of_Colorado.svg.png" height="170" width="255">
+              {% elsif state._value == "Illinois"%}
+              <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/0/01/Flag_of_Illinois.svg/1200px-Flag_of_Illinois.svg.png" height="170" width="255">
+              {% else %}
+              <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/a/ac/No_image_available.svg/1024px-No_image_available.svg.png" height="170" width="170">
+              {% endif %} ;;
+  }
   dimension: traffic_source {
     type: string
     sql: ${TABLE}.traffic_source ;;
@@ -199,11 +219,21 @@ view: users {
     type: zipcode
     sql: ${TABLE}.zip ;;
   }
-  dimension: date_formatted {
+  dimension: date_formatted1 {
+     group_label: "Date_Format"
     sql: ${created_date} ;;
-    html: {{ rendered_value | date: "%a, %B %d, %Y" }} ;;
+    html: {{ rendered_value | date: "%a, %B %d, %Y , %H:%M:%S" }} ;;
   }
-
+  dimension: date_formatted2 {
+    group_label: "Date_Format"
+    sql: ${created_date} ;;
+    html: {{ rendered_value | date: "%m/%d/%Y" }} ;;
+  }
+  dimension: date_formatted3 {
+    group_label: "Date_Format"
+    sql: ${created_date} ;;
+    html: {{ rendered_value | date: "%Y-%m-%d" }} ;;
+  }
   measure: count {
     type: count
     drill_fields: [id, first_name, last_name, orders.count]
@@ -236,4 +266,7 @@ measure: percentage_female_user {
  # value_format_name: currency_format
   sql: (1.0*${count_female_user}/NULLIF(${count},0)) ;;
   link: {label: "Explore Top 600 Results" url: "{{ count_female_user._link}}&limit=600" }
-}}
+}
+
+
+}

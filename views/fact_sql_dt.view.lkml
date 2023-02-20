@@ -19,7 +19,7 @@
           1
       ORDER BY
           2 DESC
-      LIMIT 50
+        LIMIT 50
        ;;
 }
     measure: count {
