@@ -26,6 +26,7 @@ view: sql_2 {
   }
 
   dimension: users_id {
+    primary_key: yes
     type: number
     sql: ${TABLE}."users.id" ;;
   }

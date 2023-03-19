@@ -119,7 +119,11 @@ explore: orders {
     sql_on: ${orders.user_id} = ${dimensionalize_solution.city};;
     relationship: one_to_one
   }
-
+  join: sql_2 {
+    type: left_outer
+    sql_on: ${orders.user_id} = ${sql_2.users_id};;
+    relationship: one_to_many
+  }
 }
 explore: product_facts {
   # required_access_grants: [simple1]   #---using access grant
