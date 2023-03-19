@@ -2,21 +2,19 @@ view: sql_2 {
   derived_table: {
     sql: SELECT
           "users"."city" AS "users.city",
-          COUNT(DISTINCT orders.id ) AS "orders.count"
+          "users"."id" AS "users.id",
+          COUNT(DISTINCT users.id ) AS "users.count"
       FROM
           "public"."orders" AS "orders"
           LEFT JOIN "public"."users" AS "users" ON "orders"."user_id" = "users"."id"
       GROUP BY
-          1
+          1,
+          2
       ORDER BY
-          2 DESC
+          3 DESC
        ;;
   }
-  dimension: id {
-    primary_key: yes
-    type: number
-    sql: ${TABLE}."orders.user_id" ;;
-  }
+
   measure: count {
     type: count
     drill_fields: [detail*]
@@ -27,12 +25,17 @@ view: sql_2 {
     sql: ${TABLE}."users.city" ;;
   }
 
-  dimension: orders_count {
+  dimension: users_id {
     type: number
-    sql: ${TABLE}."orders.count" ;;
+    sql: ${TABLE}."users.id" ;;
+  }
+
+  dimension: users_count {
+    type: number
+    sql: ${TABLE}."users.count" ;;
   }
 
   set: detail {
-    fields: [users_city, orders_count]
+    fields: [users_city, users_id, users_count]
   }
 }
