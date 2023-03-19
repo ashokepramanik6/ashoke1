@@ -15,7 +15,7 @@ view: sql_2 {
   dimension: id {
     primary_key: yes
     type: number
-    sql: ${TABLE}."orders.id" ;;
+    sql: ${TABLE}."orders.user_id" ;;
   }
   measure: count {
     type: count
