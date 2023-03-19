@@ -33,6 +33,10 @@ view: orders {
     ]
     sql: ${TABLE}.created_at ;;
   }
+  dimension: is_before_mtd {
+    type: yesno
+    sql: EXTRACT(Month from ${created_date}) < EXTRACT(Month from CURRENT_DATE);;
+  }
   measure: xyx {
     type: number
     sql: CAST(${created_time} As Integer) ;;

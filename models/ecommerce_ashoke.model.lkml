@@ -5,6 +5,9 @@ connection: "thelook"
 include: "/views/**/*.view"
 include: "/**/*.dashboard.lookml"
 include: "/pramanik.dashboard.lookml"
+#include: "/views/dimensionalize_solution.view.lkml"
+#include: "/views/d_s_2.view.lkml"
+#include: "/views/sql_2.view.lkml"
 
 # use the Quick Help panel on the right to see documentation.
 
@@ -111,6 +114,12 @@ explore: orders {
     sql_on: ${orders.user_id} = ${fact_ndt.customer_id} ;;
     relationship: one_to_one
   }
+  join: dimensionalize_solution {
+    type: left_outer
+    sql_on: ${orders.user_id} = ${dimensionalize_solution.city};;
+    relationship: one_to_one
+  }
+
 }
 explore: product_facts {
   # required_access_grants: [simple1]   #---using access grant
@@ -122,15 +131,16 @@ explore: product_facts {
 }
 explore: users{   #------we can use either---Access_filter OR Access_grant-------------
 
-  access_filter: {
-    field: users.state
-    user_attribute: ashoke_demo
-  }
+  # access_filter: {
+  #   field: users.state
+  #   user_attribute: ashoke_demo
+  # }
   join: orders {
     type: left_outer
     sql_on: ${users.id}=${orders.id} ;;
     relationship: many_to_one
   }
+
 }
 # access_grant: simple1 {
 #   user_attribute: ashoke_demo2

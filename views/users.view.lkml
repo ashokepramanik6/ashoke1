@@ -27,6 +27,7 @@ view: users {
 
     # required_access_grants: [can_see_pii] ##--age is no longer exists in explore, but avg_age is still there
   }
+
   # measure: xyz {
   #   type: number
   #   sql: ${age}*${count} ;;
@@ -42,9 +43,13 @@ view: users {
 
   measure: total_age {
     type: sum
-    sql: ${age} ;;
-  }
-
+    sql: ${age} ;;   #You can pass multiple filters by placing & between them
+  # link:{ label: "Average Order Profit Look"
+  #   url: "https://dcltraining.dev.looker.com/looks/2203?&f[users.state]=
+  #   {{ _filters['users.state'] | url_encode }}&f[orders.date]=
+  #   {{ _filters['orders.date'] | url_encode }}"
+  # }
+}
   measure: average_age {
     type: average
     sql: ${age} ;;
@@ -99,6 +104,8 @@ view: users {
 
   dimension_group: created {
     description: "When the order was created"
+    group_label: "Dim_group"
+    label: "AAA"
     type: time
     timeframes: [
       raw,
@@ -110,6 +117,11 @@ view: users {
       year,
       quarter_of_year
     ]
+    sql: ${TABLE}.created_at ;;
+  }
+  dimension: For_labeling {
+    type: date
+    label: "AAA_2"
     sql: ${TABLE}.created_at ;;
   }
 

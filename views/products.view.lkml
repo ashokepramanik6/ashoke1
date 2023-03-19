@@ -112,11 +112,18 @@ view: products {
   measure: total_retail_price {
     type: sum
     sql: ${retail_price} ;;
+    value_format: "0.00"
+  }
+  measure: Adds_two_measures{
+    type: number
+    sql: ${total_retail_price}+${average_retail_price} ;;
+    value_format: "0.00"
   }
 
   measure: average_retail_price {
     type: average
     sql: ${retail_price} ;;
+    value_format: "0.00"
   }
 
   dimension: sku {
