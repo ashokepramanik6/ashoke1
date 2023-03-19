@@ -12,7 +12,11 @@ view: sql_2 {
           2 DESC
        ;;
   }
-
+  dimension: id {
+    primary_key: yes
+    type: number
+    sql: ${TABLE}.id ;;
+  }
   measure: count {
     type: count
     drill_fields: [detail*]
